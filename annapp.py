@@ -105,7 +105,11 @@ def run_sentiment_app():
             st.success(f"Course experience: {result1}")
             st.success(f"Instructor: {result2}")
             st.success(f"Material: {result3}")
-
+            #counting positive and negative reviews
+            positive_count = (df_counts['Positive review'] if 'Positive review' in df_counts else 0)
+            negative_count = (df_counts['Negative review'] if 'Negative review' in df_counts else 0)
+            st.write(f"Number of positive reviews: {positive_count}")
+            st.write(f"Number of negative reviews: {negative_count}")
             # Show analytics using a bar chart
             results = {'Course experience': result1, 'Instructor': result2, 'Useful material': result3}
             df = pd.DataFrame({'Reviews': list(results.keys()), 'Sentiment': list(results.values())})
@@ -117,11 +121,7 @@ def run_sentiment_app():
             ax.set_ylabel('Count')
             st.pyplot(fig)
             
-            #counting positive and negative reviews
-            positive_count = (df_counts['Positive review'] if 'Positive review' in df_counts else 0)
-            negative_count = (df_counts['Negative review'] if 'Negative review' in df_counts else 0)
-            st.write(f"Number of positive reviews: {positive_count}")
-            st.write(f"Number of negative reviews: {negative_count}")
+
 
     # Show the analytics page if the user selects the 'Analytics' option
     elif choice == 'Analytics':
