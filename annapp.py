@@ -91,12 +91,10 @@ def run_sentiment_app():
     if choice == 'Home':
 
         st.subheader('Answer the following questions')
-
         # Get the user inputs
         review1 = st.text_input('How was the course experience?')
         review2 = st.text_input('Tell us about the instructor?')
         review3 = st.text_input('Was the material provided useful?')
-
         # Perform sentiment analysis and show the results
         if st.button('Predict'):
             result1 = predict_sentiment(review1)
@@ -105,21 +103,24 @@ def run_sentiment_app():
             st.success(f"Course experience: {result1}")
             st.success(f"Instructor: {result2}")
             st.success(f"Material: {result3}")
-            #counting positive and negative reviews
-            positive_count = (df_counts['Positive review'] if 'Positive review' in df_counts else 0)
-            negative_count = (df_counts['Negative review'] if 'Negative review' in df_counts else 0)
+
+            # Count the number of positive and negative reviews
+            results = {'Course experience': result1, 'Instructor': result2, 'Useful material': result3}
+            positive_count = sum([1 for r in results.values() if r == 'Positive review'])
+            negative_count = sum([1 for r in results.values() if r == 'Negative review'])
             st.write(f"Number of positive reviews: {positive_count}")
             st.write(f"Number of negative reviews: {negative_count}")
+
             # Show analytics using a bar chart
-            results = {'Course experience': result1, 'Instructor': result2, 'Useful material': result3}
-            df = pd.DataFrame({'Reviews': list(results.keys()), 'Sentiment': list(results.values())})
-            df_counts = df['Sentiment'].value_counts()
+            df_counts = pd.DataFrame({'Sentiment': ['Positive review', 'Negative review'], 
+                                      'Count': [positive_count, negative_count]})
             fig, ax = plt.subplots()
-            ax.bar(df_counts.index, df_counts.values, color=['blue', 'yellow'])
+            ax.bar(df_counts['Sentiment'], df_counts['Count'], color=['blue', 'orange'])
             ax.set_title('Sentiment Analysis Results')
             ax.set_xlabel('Sentiment')
             ax.set_ylabel('Count')
             st.pyplot(fig)
+
             
 
 
