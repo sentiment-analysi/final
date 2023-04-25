@@ -100,6 +100,12 @@ def run_sentiment_app():
             ax.set_xlabel('Sentiment')
             ax.set_ylabel('Count')
             st.pyplot(fig)
+            
+            #counting positive and negative reviews
+            positive_count = (df_counts['Positive review'] if 'Positive review' in df_counts else 0)
+            negative_count = (df_counts['Negative review'] if 'Negative review' in df_counts else 0)
+            st.write(f"Number of positive reviews: {positive_count}")
+            st.write(f"Number of negative reviews: {negative_count}")
 
     # Show the analytics page if the user selects the 'Analytics' option
     elif choice == 'Analytics':
