@@ -45,6 +45,7 @@ def predict_sentiment(input_review):
 
 def predict_sentiment1(df, column_name):
     input_reviews = df[column_name].tolist()
+    input_reviews = [review for review in input_reviews if isinstance(review, str) and review.strip()] # Ignore empty reviews
     input_reviews = [re.sub(pattern='[^a-zA-Z]', repl=' ', string=review) for review in input_reviews]
     input_reviews = [review.lower() for review in input_reviews]
     input_reviews = [review.split() for review in input_reviews]
@@ -60,6 +61,7 @@ def predict_sentiment1(df, column_name):
     pred = (pred > 0.5)
     sentiment = ['Positive review' if p else 'Negative review' for p in pred]
     return sentiment
+
 # Function to show the analytics in a separate tab
 def show_analytics(df, column_name):
     # Apply sentiment analysis to specified column
