@@ -21,6 +21,9 @@ sc = pickle.load(open('Standard-Scaler.pkl','rb'))
 
 # Function to perform sentiment analysis
 def predict_sentiment(input_review):
+    if not input_review:
+        return "No review"
+    
     input_review = re.sub(pattern='[^a-zA-Z]', repl=' ', string=input_review)
     input_review = input_review.lower()
     input_review_words = input_review.split()
@@ -38,6 +41,7 @@ def predict_sentiment(input_review):
         return "Positive review"
     else:
         return "Negative review"
+
 
 def predict_sentiment1(df, column_name):
     input_reviews = df[column_name].tolist()
