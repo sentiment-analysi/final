@@ -59,7 +59,7 @@ def predict_sentiment1(df, column_name):
 # Function to show the analytics in a separate tab
 def show_analytics(df, column_name):
     # Apply sentiment analysis to specified column
-    sentiments = predict_sentiment(df, column_name)
+    sentiments = predict_sentiment1(df, column_name)
     
     # Get the count of reviews and positive/negative reviews
     total_reviews = len(sentiments)
