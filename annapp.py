@@ -39,35 +39,69 @@ def predict_sentiment(input_review):
     else:
         return "Negative review"
 
+# Function to show the analytics in a separate tab
+def show_analytics(df):
+    # Perform sentiment analysis on all the reviews
+    df['Sentiment'] = df['Reviews'].apply(predict_sentiment)
+
+    # Plot the sentiment analysis results using matplotlib
+    fig, ax = plt.subplots()
+    ax.bar(df['Sentiment'].value_counts().index, df['Sentiment'].value_counts().values, color=['blue', 'orange'])
+    ax.set_title('Sentiment Analysis Results')
+    ax.set_xlabel('Sentiment')
+    ax.set_ylabel('Count')
+    st.pyplot(fig)
+
 # Main function to run the app
-def main():
-    st.title('Student sentiment analysis')
+def run_sentiment_app():
+    st.title('Sentiment Analysis App')
 
-    # Get the user inputs
-    review1 = st.text_input('How was the course experience?')
-    review2 = st.text_input('Tell us about the instructor?')
-    review3 = st.text_input('Was the material provided useful?')
+    # Add a menu with two options
+    menu = ['Home', 'Analytics']
+    choice = st.sidebar.selectbox('Select page', menu)
 
-    # Perform sentiment analysis and show the results
-    if st.button('Predict'):
-        result1 = predict_sentiment(review1)
-        result2 = predict_sentiment(review2)
-        result3 = predict_sentiment(review3)
-        st.success(f"Course experience: {result1}")
-        st.success(f"Instructor: {result2}")
-        st.success(f"Material: {result3}")
-        
-        # Show analytics using a bar chart
-        results = {'Course experience': result1, 'Instructor': result2, 'Useful material': result3}
-        df = pd.DataFrame({'Reviews': list(results.keys()), 'Sentiment': list(results.values())})
-        df_counts = df['Sentiment'].value_counts()
-        fig, ax = plt.subplots()
-        ax.bar(df_counts.index, df_counts.values, color=['blue', 'yellow'])
-        ax.set_title('Sentiment Analysis Results')
-        ax.set_xlabel('Sentiment')
-        ax.set_ylabel('Count')
-        st.pyplot(fig)
+    # Show the home page if the user selects the 'Home' option
+    if choice == 'Home':
+
+        st.subheader('Answer the following questions')
+
+        # Get the user inputs
+        review1 = st.text_input('How was the course experience?')
+        review2 = st.text_input('Tell us about the instructor?')
+        review3 = st.text_input('Was the material provided useful?')
+
+        # Perform sentiment analysis and show the results
+        if st.button('Predict'):
+            result1 = predict_sentiment(review1)
+            result2 = predict_sentiment(review2)
+            result3 = predict_sentiment(review3)
+            st.success(f"Course experience: {result1}")
+            st.success(f"Instructor: {result2}")
+            st.success(f"Material: {result3}")
+
+            # Show analytics using a bar chart
+            results = {'Course experience': result1, 'Instructor': result2, 'Useful material': result3}
+            df = pd.DataFrame({'Reviews': list(results.keys()), 'Sentiment': list(results.values())})
+            df_counts = df['Sentiment'].value_counts()
+            fig, ax = plt.subplots()
+            ax.bar(df_counts.index, df_counts.values, color=['blue', 'yellow'])
+            ax.set_title('Sentiment Analysis Results')
+            ax.set_xlabel('Sentiment')
+            ax.set_ylabel('Count')
+            st.pyplot(fig)
+
+    # Show the analytics page if the user selects the 'Analytics' option
+    elif choice == 'Analytics':
+        st.subheader('Upload an Excel file to perform sentiment analysis')
+        file = st.file_uploader("Upload an Excel file", type=["xlsx", "xls"])
+        if file is not None:
+            df = pd.read_excel(file)
+            st.write(df)
+
+            # Show analytics in a separate tab on click of a button
+            if st.button('Show Analytics'):
+                show_analytics(df)
 
 # Run the app
 if __name__=='__main__':
-    main()
+    run_sentiment_app()
