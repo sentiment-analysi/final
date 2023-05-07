@@ -112,6 +112,28 @@ def show_analytics(df, column_name):
     ax.set_xlabel('Sentiment')
     ax.set_ylabel('Count')
     st.pyplot(fig)
+ 
+# Define function to delete reviews
+def delete_reviews():
+    # Get all available USNs
+    usns = [row[0] for row in c.execute("SELECT usn FROM reviews2").fetchall()]
+
+    # Show dropdown to select a USN
+    selected_usn = st.selectbox('Select a USN:', options=usns)
+
+    # Delete the selected review
+    if selected_usn:
+        delete_button = st.button('Delete')
+
+        if delete_button:
+            c.execute("DELETE FROM reviews2 WHERE usn=?", (selected_usn,))
+            conn.commit()
+            c.execute("VACUUM")  # This optimizes the database
+            st.success(f'Review for {selected_usn} has been deleted.')
+    else:
+        st.warning('Please select a USN to delete.')
+
+
     
 def show_sentiment_wise_analytics(reviews_df):
     num_pos_reviewsfor1 = len(reviews_df[reviews_df['sentiment1'] == 'Positive review'])
@@ -267,25 +289,12 @@ def run_sentiment_app():
             else:
                 st.header('Reviews Table')
                 st.dataframe(reviews_df)
-                st.header('Reviews Table')
-                st.dataframe(reviews_df)
-                # Get all available USNs
-                usns = [row[0] for row in c.execute("SELECT usn FROM reviews2").fetchall()]
-
-                # Show dropdown to select a USN
-                selected_usn = st.selectbox('Select a USN:', options=usns)
-
-                # Delete the selected review
-                if selected_usn:
-                    delete_button = st.button('Delete')
-
-                    if delete_button:
-                        c.execute("DELETE FROM reviews2 WHERE usn=?", (selected_usn,))
-                        conn.commit()
-                        c.execute("VACUUM")  # This optimizes the database
-                        st.success(f'Review for {selected_usn} has been deleted.')
-                else:
-                    st.warning('Please select a USN to delete.')
+                # Create a beta expander for delete reviews feature
+                with st.beta_expander('Delete Reviews'):
+                    st.write('Use this section to delete reviews from the database.')
+                    st.write('Select a USN from the dropdown, and click the Delete button to remove the review.')
+                    delete_reviews()
+               
 
 
                   
