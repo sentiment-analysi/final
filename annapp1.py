@@ -236,10 +236,13 @@ def run_sentiment_app():
 
                 # Store the reviews in the database
                 if submitted:
+                    usn_pattern = r'^[1-9][A-Za-z]{2}\d{2}[A-Za-z]{2}\d{3}$'
                     if not usn or not name or not review1 or not review2 or not review3:
                         st.error('Please fill in all fields.')
                     elif len(usn) != 10:
                         st.error('Incorrect USN. Please enter a 10 character USN.')
+                    elif not re.match(usn_pattern, usn):
+                        st.error('Incorrect USN. Please enter a valid USN (eg;4JK16CS001). ')
                     else:
                         c.execute("SELECT * FROM reviews2 WHERE usn=?", (usn,))
                         existing_review = c.fetchone()
