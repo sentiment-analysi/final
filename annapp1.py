@@ -131,7 +131,8 @@ def delete_reviews():
             c.execute("VACUUM")  # This optimizes the database
             st.success(f'Review for {selected_usn} has been deleted.')
             reviews_df = pd.read_sql_query("SELECT * FROM reviews2", conn)
-            st.dataframe(reviews_df)
+            st.experimental_rerun()
+
     else:
         st.warning('Please select a USN to delete.')
 
