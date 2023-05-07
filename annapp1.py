@@ -269,10 +269,13 @@ def run_sentiment_app():
                 st.dataframe(reviews_df)
                 # Allow admin to delete all reviews
                 if st.button('Delete all reviews'):
-                    c.execute("DELETE FROM reviews2")
-                    conn.commit()
-                    c.execute("VACUUM")  # This optimizes the database
-                    st.success('All reviews have been deleted.')
+                  # Add confirmation dialog box
+                  if st.confirmation_dialog('Are you sure you want to delete all reviews?'):
+                      c.execute("DELETE FROM reviews2")
+                      conn.commit()
+                      c.execute("VACUUM")
+                      st.success('All reviews have been deleted.')
+
                 show_sentiment_wise_analytics(reviews_df)
     # Show the analytics page if the user selects the 'Analytics' option
     elif choice == 'Analytics':
