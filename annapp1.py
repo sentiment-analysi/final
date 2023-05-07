@@ -275,12 +275,16 @@ def run_sentiment_app():
                   # Show dropdown to select a USN
                   selected_usn = st.selectbox('Select a USN:', options=usns)
 
-                  # Delete the selected review
-                  if st.button('Delete'):
-                      c.execute("DELETE FROM reviews2 WHERE usn=?", (selected_usn,))
-                      conn.commit()
-                      c.execute("VACUUM")  # This optimizes the database
-                      st.success(f'Review for {selected_usn} has been deleted.')
+                  if selected_usn:
+                      # Show confirmation dialog before deleting the review
+                      if st.warning(f"Are you sure you want to delete the review for {selected_usn}?"):
+                          c.execute("DELETE FROM reviews2 WHERE usn=?", (selected_usn,))
+                          conn.commit()
+                          c.execute("VACUUM")  # This optimizes the database
+                          st.success(f"Review for {selected_usn} has been deleted.")
+
+                  else:
+                      st.warning('Please select a USN to delete a review.')
 
 
                 # Allow admin to delete all reviews
