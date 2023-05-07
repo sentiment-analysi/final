@@ -91,7 +91,13 @@ def predict_sentiment1(df, column_name):
     return sentiment
 
 # Function to show the analytics in a separate tab
+
 def show_analytics(df, column_name):
+    # Check if the selected column qualifies for sentiment analysis
+    if df[column_name].dtype not in [np.dtype('O'), np.dtype('<U')]:
+        st.error('Selected column is not a text column')
+        return
+    
     # Apply sentiment analysis to specified column
     sentiments = predict_sentiment1(df, column_name)
     
@@ -112,6 +118,7 @@ def show_analytics(df, column_name):
     ax.set_xlabel('Sentiment')
     ax.set_ylabel('Count')
     st.pyplot(fig)
+
  
 # Define function to delete reviews
 def delete_reviews():
