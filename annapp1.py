@@ -290,7 +290,7 @@ def run_sentiment_app():
                 st.header('Reviews Table')
                 st.dataframe(reviews_df)
                 # Create a beta expander for delete reviews feature
-                with st.beta_expander('Delete Reviews'):
+                with st.expander('Delete Reviews'):
                     st.write('Use this section to delete reviews from the database.')
                     st.write('Select a USN from the dropdown, and click the Delete button to remove the review.')
                     delete_reviews()
