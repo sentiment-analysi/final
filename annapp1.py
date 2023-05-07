@@ -293,6 +293,9 @@ def run_sentiment_app():
             else:
                 st.header('Reviews Table')
                 st.dataframe(reviews_df)
+                if st.button('Refresh'):
+                  reviews_df = pd.read_sql_query("SELECT * FROM reviews2", conn)
+                  st.experimental_rerun()
                 # Create a beta expander for delete reviews feature
                 with st.expander('Delete Reviews'):
                     st.write('Use this section to delete reviews from the database.')
