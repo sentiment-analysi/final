@@ -165,7 +165,7 @@ def show_sentiment_wise_analytics(reviews_df):
 
 # Main function to run the app
 def run_sentiment_app():
-    st.title('Sentiment Analysis App')
+    st.title('Student Sentiment Analysis')
 
     # Add a menu with two options
     menu = ['Home', 'Analytics', 'Forms']
