@@ -301,7 +301,7 @@ def run_sentiment_app():
                     st.write('Use this section to delete reviews from the database.')
                     st.write('Select a USN from the dropdown, and click the Delete button to remove the review.')
                     delete_reviews()
-                    st.write('Click this below button if you want to delete all the entries')
+                    st.write('Click this button below , if you want to delete all the entries')
                     if st.button('Delete all reviews'):
                       # Add confirmation dialog box
                       c.execute("DELETE FROM reviews2")
