@@ -242,7 +242,7 @@ def run_sentiment_app():
                     elif len(usn) != 10:
                         st.error('Incorrect USN. Please enter a 10 character USN.')
                     elif not re.match(usn_pattern, usn):
-                        st.error('Incorrect USN. Please enter a valid USN (eg;4JK16CS001). ')
+                        st.error('Incorrect USN. Please enter a valid USN (eg:4JK16CS001). ')
                     else:
                         c.execute("SELECT * FROM reviews2 WHERE usn=?", (usn,))
                         existing_review = c.fetchone()
