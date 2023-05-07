@@ -281,9 +281,8 @@ def run_sentiment_app():
                             c.execute("INSERT INTO reviews2 (usn, name, course_experience, sentiment1, instructor, sentiment2, material, sentiment3) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                                     (usn, name, review1, sentiment1, review2, sentiment2, review3, sentiment3))
                             conn.commit()
-                            reviews_df = pd.read_sql_query("SELECT * FROM reviews2", conn)
-                            st.experimental_rerun()
                             st.success('Thank you, Your feedback is submitted.')
+                            st.experimental_rerun()
 
         # Display reviews for admin
         if is_admin and username == 'admin' and password == 'password':
