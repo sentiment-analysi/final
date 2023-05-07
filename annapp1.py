@@ -274,21 +274,16 @@ def run_sentiment_app():
 
                   # Show dropdown to select a USN
                   selected_usn = st.selectbox('Select a USN:', options=usns)
-
-                  # Disable Delete button until a USN is selected
-                  delete_button = st.button('Delete', disabled=True)
-
-                  # Enable Delete button after a USN has been selected
                   if selected_usn:
-                      delete_button = st.button('Delete', key='delete_button')
+                    # Show delete button
+                    delete_button = st.button('Delete')
+                    if delete_button:
+                        c.execute("DELETE FROM reviews2 WHERE usn=?", (selected_usn,))
+                        conn.commit()
+                        c.execute("VACUUM")
+                        st.success(f"Review for {selected_usn} has been deleted.")
 
-                  # Delete the selected review
-                  if delete_button:
-                      c.execute("DELETE FROM reviews2 WHERE usn=?", (selected_usn,))
-                      conn.commit()
-                      c.execute("VACUUM")  # This optimizes the database
-                      st.success(f'Review for {selected_usn} has been deleted.')
-
+                
 
 
 
