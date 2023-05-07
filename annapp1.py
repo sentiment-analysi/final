@@ -214,7 +214,7 @@ def run_sentiment_app():
 
         # Login process for admin
         if is_admin:
-            st.header('Admin Login')
+            st.subheader('Admin Login')
             username = st.text_input('Username:')
             password = st.text_input('Password:', type='password')
             if st.button('Login'):
