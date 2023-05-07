@@ -276,12 +276,12 @@ def run_sentiment_app():
                   selected_usn = st.selectbox('Select a USN:', options=usns)
 
                   # Delete the selected review
-                  if st.button('Delete'):
-                      print(f"Deleting review for USN: {selected_usn}")
+                  if selected_usn and st.button('Delete'):
                       c.execute("DELETE FROM reviews2 WHERE usn=?", (selected_usn,))
                       conn.commit()
                       c.execute("VACUUM")  # This optimizes the database
                       st.success(f'Review for {selected_usn} has been deleted.')
+
 
 
 
