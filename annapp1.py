@@ -305,7 +305,8 @@ def run_sentiment_app():
                       c.execute("VACUUM")
                       st.success('All reviews have been deleted.')
                       reviews_df = pd.read_sql_query("SELECT * FROM reviews2", conn)
-        
+                      st.experimental_rerun()
+
                   
 
                 show_sentiment_wise_analytics(reviews_df)
