@@ -294,22 +294,13 @@ def run_sentiment_app():
                     st.write('Use this section to delete reviews from the database.')
                     st.write('Select a USN from the dropdown, and click the Delete button to remove the review.')
                     delete_reviews()
-               
-
-
-                  
-                
-
-
-
-
-                # Allow admin to delete all reviews
-                if st.button('Delete all reviews'):
-                  # Add confirmation dialog box
-                  c.execute("DELETE FROM reviews2")
-                  conn.commit()
-                  c.execute("VACUUM")
-                  st.success('All reviews have been deleted.')
+                    if st.button('Delete all reviews'):
+                      # Add confirmation dialog box
+                      c.execute("DELETE FROM reviews2")
+                      conn.commit()
+                      c.execute("VACUUM")
+                      st.success('All reviews have been deleted.')
+    
                   
 
                 show_sentiment_wise_analytics(reviews_df)
