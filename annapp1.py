@@ -275,6 +275,8 @@ def run_sentiment_app():
                       conn.commit()
                       c.execute("VACUUM")
                       st.success('All reviews have been deleted.')
+                  else:
+                    st.error('Deletion cancelled.')
 
                 show_sentiment_wise_analytics(reviews_df)
     # Show the analytics page if the user selects the 'Analytics' option
