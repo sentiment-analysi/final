@@ -11,7 +11,7 @@ from keras.models import load_model
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-
+import sqlite3
 nltk.download('stopwords')
 
 # Load the trained model and preprocessing objects
