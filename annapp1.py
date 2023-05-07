@@ -282,7 +282,7 @@ def run_sentiment_app():
                                     (usn, name, review1, sentiment1, review2, sentiment2, review3, sentiment3))
                             conn.commit()
                             st.success('Thank you, Your feedback is submitted.')
-                            st.experimental_rerun()
+                           
 
         # Display reviews for admin
         if is_admin and username == 'admin' and password == 'password':
