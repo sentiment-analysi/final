@@ -10,6 +10,7 @@ from sklearn.preprocessing import StandardScaler
 from keras.models import load_model
 import streamlit as st
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import sqlite3
 nltk.download('stopwords')
