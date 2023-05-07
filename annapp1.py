@@ -280,7 +280,7 @@ def run_sentiment_app():
     # Show the analytics page if the user selects the 'Analytics' option
     elif choice == 'Analytics':
         st.subheader('Upload an excel file to perform sentiment analysis')
-        file = st.file_uploader("Upload an Excel file", type=["xlsx", "xls"])
+        file = st.file_uploader("Upload an existing Excel file", type=["xlsx", "xls"])
         if file is not None:
             df = pd.read_excel(file)
             column_name = st.selectbox('Select column to analyze:', df.columns)
