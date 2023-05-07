@@ -267,6 +267,8 @@ def run_sentiment_app():
             else:
                 st.header('Reviews Table')
                 st.dataframe(reviews_df)
+                st.header('Reviews Table')
+                st.dataframe(reviews_df)
                 # Get all available USNs
                 usns = [row[0] for row in c.execute("SELECT usn FROM reviews2").fetchall()]
 
