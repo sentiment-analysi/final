@@ -270,7 +270,7 @@ def run_sentiment_app():
                 # Allow admin to delete all reviews
                 if st.button('Delete all reviews'):
                   # Add confirmation dialog box
-                  if st.warning('Are you sure you want to delete all reviews?'):
+                  if st.confirmation_dialog('Are you sure you want to delete all reviews?'):
                       c.execute("DELETE FROM reviews2")
                       conn.commit()
                       c.execute("VACUUM")
