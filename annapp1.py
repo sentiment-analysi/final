@@ -130,6 +130,7 @@ def delete_reviews():
             conn.commit()
             c.execute("VACUUM")  # This optimizes the database
             st.success(f'Review for {selected_usn} has been deleted.')
+            reviews_df = pd.read_sql_query("SELECT * FROM reviews2", conn)
     else:
         st.warning('Please select a USN to delete.')
 
@@ -301,7 +302,8 @@ def run_sentiment_app():
                       conn.commit()
                       c.execute("VACUUM")
                       st.success('All reviews have been deleted.')
-    
+                      reviews_df = pd.read_sql_query("SELECT * FROM reviews2", conn)
+        
                   
 
                 show_sentiment_wise_analytics(reviews_df)
