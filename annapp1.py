@@ -267,18 +267,19 @@ def run_sentiment_app():
             else:
                 st.header('Reviews Table')
                 st.dataframe(reviews_df)
+                # Get all available USNs
+                usns = [row[0] for row in c.execute("SELECT usn FROM reviews2").fetchall()]
+
+                # Show dropdown to select a USN
+                selected_usn = st.selectbox('Select a USN:', options=usns)
+
+                # Delete the selected review
                 if st.button('Delete'):
-                  row_to_delete = st.text_input('Enter the USN of the review to be deleted:')
-                  if row_to_delete:
-                      c.execute("SELECT * FROM reviews2 WHERE usn=?", (row_to_delete,))
-                      existing_review = c.fetchone()
-                      if existing_review:
-                          c.execute("DELETE FROM reviews2 WHERE usn=?", (row_to_delete,))
-                          conn.commit()
-                          c.execute("VACUUM")
-                          st.success(f"Review for {row_to_delete} has been deleted.")
-                      else:
-                          st.warning(f"No review found with USN {row_to_delete}.")
+                    c.execute("DELETE FROM reviews2 WHERE usn=?", (selected_usn,))
+                    conn.commit()
+                    c.execute("VACUUM")  # This optimizes the database
+                    st.success(f'Review for {selected_usn} has been deleted.')
+
 
                 # Allow admin to delete all reviews
                 if st.button('Delete all reviews'):
