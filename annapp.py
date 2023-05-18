@@ -14,15 +14,22 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sqlite3
 import pymysql
+import mysql.connector
 nltk.download('stopwords')
 
 # Load the trained model and preprocessing objects
 classifier = load_model('trained_model.h5')
 cv = pickle.load(open('count-Vectorizer.pkl','rb'))
 sc = pickle.load(open('Standard-Scaler.pkl','rb'))
+import mysql.connector
 
-
-conn = pymysql.connect(host='sql12.freesqldatabase.com', user='sql12619244', password='NP2lGRPxFL', db='sql12619244')
+# Establish a connection to your MySQL database
+conn = mysql.connector.connect(
+    host="sql12.freesqldatabase.com",
+    user="sql12619244",
+    password="NP2lGRPxFL",
+    database="sql12619244"
+)
 c = conn.cursor()
 
 
