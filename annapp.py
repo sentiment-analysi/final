@@ -13,6 +13,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import sqlite3
+import pymysql
 nltk.download('stopwords')
 
 # Load the trained model and preprocessing objects
@@ -21,24 +22,19 @@ cv = pickle.load(open('count-Vectorizer.pkl','rb'))
 sc = pickle.load(open('Standard-Scaler.pkl','rb'))
 
 
-conn = sqlite3.connect('reviews2.db')
+conn = pymysql.connect(
+    host="sql12.freesqldatabase.com",
+    port=3306,
+    database="sql12619244",
+    user="sql12619244",
+    password="NP2lGRPxFL"
+)
 c = conn.cursor()
 
 ADMIN_USERNAME = 'admin'
 ADMIN_PASSWORD = 'password'
 
-# Create a table to store the reviews
-c.execute('''CREATE TABLE IF NOT EXISTS reviews2
-             (id INTEGER PRIMARY KEY AUTOINCREMENT,
-              usn TEXT(10) NOT NULL,
-              name TEXT NOT NULL,
-              course_experience TEXT NOT NULL,
-              sentiment1 TEXT NOT NULL,
-              instructor TEXT NOT NULL,
-              sentiment2 TEXT NOT NULL,
-              material TEXT NOT NULL,
-              sentiment3 TEXT NOT NULL)''')
-conn.commit()
+
 
 # Function to perform sentiment analysis
 def predict_sentiment(input_review):
@@ -123,7 +119,7 @@ def show_analytics(df, column_name):
 # Define function to delete reviews
 def delete_reviews():
     # Get all available USNs
-    usns = [row[0] for row in c.execute("SELECT usn FROM reviews2").fetchall()]
+    usns = [row[0] for row in c.execute("SELECT usn FROM reviews").fetchall()]
 
     # Show dropdown to select a USN
     selected_usn = st.selectbox('Select a USN:', options=usns)
@@ -133,11 +129,11 @@ def delete_reviews():
         delete_button = st.button('Delete')
 
         if delete_button:
-            c.execute("DELETE FROM reviews2 WHERE usn=?", (selected_usn,))
+            c.execute("DELETE FROM reviews WHERE usn=?", (selected_usn,))
             conn.commit()
             c.execute("VACUUM")  # This optimizes the database
             st.success(f'Review for {selected_usn} has been deleted.')
-            reviews_df = pd.read_sql_query("SELECT * FROM reviews2", conn)
+            reviews_df = pd.read_sql_query("SELECT * FROM reviews", conn)
             st.experimental_rerun()
 
     else:
@@ -285,7 +281,7 @@ def run_sentiment_app():
                             sentiment1 = predict_sentiment(review1)
                             sentiment2 = predict_sentiment(review2)
                             sentiment3 = predict_sentiment(review3)
-                            c.execute("INSERT INTO reviews2 (usn, name, course_experience, sentiment1, instructor, sentiment2, material, sentiment3) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                            c.execute("INSERT INTO reviews (usn, name, course_experience, sentiment1, instructor, sentiment2, material, sentiment3) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                                     (usn, name, review1, sentiment1, review2, sentiment2, review3, sentiment3))
                             conn.commit()
                             st.success('Thank you, Your feedback is submitted.')
@@ -293,7 +289,7 @@ def run_sentiment_app():
 
         # Display reviews for admin
         if is_admin and username == 'admin' and password == 'password':
-            reviews_df = pd.read_sql_query("SELECT * FROM reviews2", conn)
+            reviews_df = pd.read_sql_query("SELECT * FROM reviews", conn)
             # Check if there are any reviews to display
             if len(reviews_df) == 0:
                 st.warning('No reviews to display.')
@@ -301,7 +297,7 @@ def run_sentiment_app():
                 st.header('Reviews Table')
                 st.dataframe(reviews_df)
                 if st.button('Refresh'):
-                  reviews_df = pd.read_sql_query("SELECT * FROM reviews2", conn)
+                  reviews_df = pd.read_sql_query("SELECT * FROM reviews", conn)
                   st.experimental_rerun()
                 # Create a beta expander for delete reviews feature
                 with st.expander('Delete Reviews'):
@@ -311,11 +307,11 @@ def run_sentiment_app():
                     st.write('Click this button below , if you want to delete all the entries')
                     if st.button('Delete all reviews'):
                       # Add confirmation dialog box
-                      c.execute("DELETE FROM reviews2")
+                      c.execute("DELETE FROM reviews")
                       conn.commit()
                       c.execute("VACUUM")
                       st.success('All reviews have been deleted.')
-                      reviews_df = pd.read_sql_query("SELECT * FROM reviews2", conn)
+                      reviews_df = pd.read_sql_query("SELECT * FROM reviews", conn)
                       st.experimental_rerun()
 
                   
