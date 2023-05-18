@@ -22,13 +22,8 @@ cv = pickle.load(open('count-Vectorizer.pkl','rb'))
 sc = pickle.load(open('Standard-Scaler.pkl','rb'))
 
 
-conn = pymysql.connect(
-    host="sql12.freesqldatabase.com",
-    port=3306,
-    database="reviews",
-    user="sql12619244",
-    password="NP2lGRPxFL"
-)
+conn = pymysql.connect(host='sql12.freesqldatabase.com', user='sql12619244', password='NP2lGRPxFL', db='reviews')
+
 c = conn.cursor()
 
 ADMIN_USERNAME = 'admin'
