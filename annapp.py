@@ -23,8 +23,18 @@ sc = pickle.load(open('Standard-Scaler.pkl','rb'))
 
 
 conn = pymysql.connect(host='sql12.freesqldatabase.com', user='sql12619244', password='NP2lGRPxFL', db='sql12619244')
-
 c = conn.cursor()
+c.execute('''CREATE TABLE IF NOT EXISTS reviews
+             (id INTEGER PRIMARY KEY AUTOINCREMENT,
+              usn TEXT(10) NOT NULL,
+              name TEXT NOT NULL,
+              course_experience TEXT NOT NULL,
+              sentiment1 TEXT NOT NULL,
+              instructor TEXT NOT NULL,
+              sentiment2 TEXT NOT NULL,
+              material TEXT NOT NULL,
+              sentiment3 TEXT NOT NULL)''')
+conn.commit()
 
 ADMIN_USERNAME = 'admin'
 ADMIN_PASSWORD = 'password'
