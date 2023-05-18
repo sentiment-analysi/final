@@ -267,7 +267,7 @@ def run_sentiment_app():
                     elif not re.match(usn_pattern, usn):
                         st.error('Incorrect USN. Please enter a valid USN (eg:4JK16CS001). ')
                     else:
-                        c.execute("SELECT * FROM reviews WHERE usn=?", (usn,))
+                        c.execute("SELECT * FROM reviews WHERE usn=%s", (usn,))
                         existing_review = c.fetchone()
                         if existing_review:
                             # If the usn already exists, show an error message
