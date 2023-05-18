@@ -22,7 +22,7 @@ cv = pickle.load(open('count-Vectorizer.pkl','rb'))
 sc = pickle.load(open('Standard-Scaler.pkl','rb'))
 
 
-conn = pymysql.connect(host='sql12.freesqldatabase.com', user='sql12619244', password='NP2lGRPxFL', db='reviews')
+conn = pymysql.connect(host='sql12.freesqldatabase.com', user='sql12619244', password='NP2lGRPxFL', db='sql12619244')
 
 c = conn.cursor()
 
