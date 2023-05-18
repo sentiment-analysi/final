@@ -276,8 +276,8 @@ def run_sentiment_app():
                             sentiment1 = predict_sentiment(review1)
                             sentiment2 = predict_sentiment(review2)
                             sentiment3 = predict_sentiment(review3)
-                            c.execute("INSERT INTO reviews (usn, name, course_experience, sentiment1, instructor, sentiment2, material, sentiment3) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                                    (usn, name, review1, sentiment1, review2, sentiment2, review3, sentiment3))
+                            c.execute("INSERT INTO reviews (usn, name, course_experience, sentiment1, instructor, sentiment2, material, sentiment3) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",(usn, name, course_experience, sentiment1, instructor, sentiment2, material, sentiment3))
+
                             conn.commit()
                             st.success('Thank you, Your feedback is submitted.')
                            
