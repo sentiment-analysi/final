@@ -115,9 +115,12 @@ def show_analytics(df, column_name):
     ax.set_xlabel('Sentiment')
     ax.set_ylabel('Count')
     
-    # Add count labels above each bar
+    # Add count labels inside each bar
     for i, count in enumerate([positive_reviews, negative_reviews]):
         ax.text(i, count, str(count), ha='center', va='bottom', color='white')
+    
+    # Set the ylim to include the count labels
+    ax.set_ylim(top=max(positive_reviews, negative_reviews) * 1.1)
     
     st.pyplot(fig)
 
