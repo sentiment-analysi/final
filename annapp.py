@@ -13,6 +13,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import sqlite3
+import io
 import mysql.connector
 from openpyxl import Workbook
 
