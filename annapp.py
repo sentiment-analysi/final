@@ -89,6 +89,59 @@ def predict_sentiment1(df, column_name):
 
 # Function to show the analytics in a separate tab
 
+def show_analytics(df, column_name):
+    # Check if the selected column qualifies for sentiment analysis
+    if df[column_name].dtype not in [np.dtype('O'), np.dtype('<U')]:
+        st.error('Selected column is not a text column')
+        return
+    
+    # Apply sentiment analysis to specified column
+    sentiments = predict_sentiment1(df, column_name)
+    
+    # Get the count of reviews and positive/negative reviews
+    total_reviews = len(sentiments)
+    positive_reviews = sentiments.count('Positive review')
+    negative_reviews = sentiments.count('Negative review')
+    
+    # Print the count of reviews and positive/negative reviews
+    st.write(f"Total number of reviews: {total_reviews}")
+    st.write(f"Number of positive reviews: {positive_reviews}")
+    st.write(f"Number of negative reviews: {negative_reviews}")
+    
+    # Plot the sentiment analysis results using matplotlib
+    fig, ax = plt.subplots()
+    ax.bar(['Positive', 'Negative'], [positive_reviews, negative_reviews], color=['blue', 'orange'])
+    ax.set_title('Sentiment Analysis Results')
+    ax.set_xlabel('Sentiment')
+    ax.set_ylabel('Count')
+    st.pyplot(fig)
+
+ 
+# Define function to delete reviews
+def delete_reviews():
+    # Get all available USNs
+    usns = [rows for row in c.execute("SELECT usn FROM reviews").fetchall()]
+
+    # Show dropdown to select a USN
+    selected_usn = st.selectbox('Select a USN:', options=usns)
+
+    # Delete the selected review
+    if selected_usn:
+        delete_button = st.button('Delete')
+
+        if delete_button:
+            c.execute("DELETE FROM reviews WHERE usn=?", (selected_usn,))
+            conn.commit()
+            c.execute("VACUUM")  # This optimizes the database
+            st.success(f'Review for {selected_usn} has been deleted.')
+            reviews_df = pd.read_sql_query("SELECT * FROM reviews", conn)
+            st.experimental_rerun()
+
+    else:
+        st.warning('Please select a USN to delete.')
+
+
+    
 def show_sentiment_wise_analytics(reviews_df):
     num_pos_reviewsfor1 = len(reviews_df[reviews_df['sentiment1'] == 'Positive review'])
     num_pos_reviewsfor2 = len(reviews_df[reviews_df['sentiment2'] == 'Positive review'])
@@ -106,46 +159,37 @@ def show_sentiment_wise_analytics(reviews_df):
     st.subheader("Question 1 - Course_experience")
     st.write(f"Positive reviews: {num_pos_reviewsfor1}")
     st.write(f"Negative reviews: {num_neg_reviewsfor1}")
-
+    
     st.subheader("Question 2 - About Instructor")
     st.write(f"Positive reviews: {num_pos_reviewsfor2}")
     st.write(f"Negative reviews: {num_neg_reviewsfor2}")
-
+    
     st.subheader("Question 3 - Material Feedback")
     st.write(f"Positive reviews: {num_pos_reviewsfor3}")
-    st.write(f"Negative reviews: {num_neg_reviewsfor3}")
-
+    st.write(f"Negative reviews: {num_neg_reviewsfor3}")    
+    
+    
     st.subheader("Total Reviews")
     st.write(f"Positive reviews: {totalnum_pos_reviews}")
     st.write(f"Negative reviews: {totalnum_neg_reviews}")
     st.write(f"Total reviews recorded: {totalnum_pos_reviews+totalnum_neg_reviews}")
 
     # Create a bar graph of the sentiment analysis results
-    # Create a bar graph of the sentiment analysis results
-    fig, ax = plt.subplots(figsize=(10, 5))
+    fig, ax = plt.subplots(figsize=(10,5))
     sentiment_labels = ['Positive', 'Negative']
     question_labels = ['Q1', 'Q2', 'Q3', 'Total']
     pos_counts = [num_pos_reviewsfor1, num_pos_reviewsfor2, num_pos_reviewsfor3, totalnum_pos_reviews]
     neg_counts = [num_neg_reviewsfor1, num_neg_reviewsfor2, num_neg_reviewsfor3, totalnum_neg_reviews]
     x = np.arange(len(question_labels))
     width = 0.35
-    ax.bar(x - width / 2, pos_counts, width, label='Positive', color='green')
-    ax.bar(x + width / 2, neg_counts, width, label='Negative', color='red')
+    ax.bar(x - width/2, pos_counts, width, label='Positive', color='green')
+    ax.bar(x + width/2, neg_counts, width, label='Negative', color='red')
     ax.set_xticks(x)
     ax.set_xticklabels(question_labels)
     ax.legend()
     ax.set_ylabel('Number of Reviews')
     ax.set_xlabel('Questions')
     ax.set_title('Sentiment Analysis Results')
-
-    # Add count labels above each bar
-    for i, pos_count in enumerate(pos_counts):
-        ax.text(i - width / 2, pos_count + 0.1, str(pos_count), ha='center', color='black')
-        ax.text(i - width / 2, neg_counts[i] + 0.1, str(neg_counts[i]), ha='center', color='black')
-    for i, neg_count in enumerate(neg_counts):
-        ax.text(i + width / 2, neg_count + 0.1, str(neg_count), ha='center', color='black')
-        ax.text(i + width / 2, pos_counts[i] + 0.1, str(pos_counts[i]), ha='center', color='black')
-
     st.pyplot(fig)
 
     
