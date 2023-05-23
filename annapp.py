@@ -120,7 +120,7 @@ def show_analytics(df, column_name):
 # Define function to delete reviews
 def delete_reviews():
     # Get all available USNs
-    usns = [row[0] for row in c.execute("SELECT usn FROM reviews").fetchall()]
+    usns = [rows for row in c.execute("SELECT usn FROM reviews").fetchall()]
 
     # Show dropdown to select a USN
     selected_usn = st.selectbox('Select a USN:', options=usns)
