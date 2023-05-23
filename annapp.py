@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import sqlite3
 import io
 import mysql.connector
-from openpyxl import Workbook
+from xlsxwriter import Workbook
 
 nltk.download('stopwords')
 
