@@ -398,18 +398,21 @@ def run_sentiment_app():
                     reviews_df = pd.read_sql_query("SELECT * FROM reviews", conn)
                     st.experimental_rerun()
                     
-                if st.button('Download'):
-                    # Convert DataFrame to Excel file in memory
-                    excel_file = io.BytesIO()
-                    with pd.ExcelWriter(excel_file, engine='xlsxwriter') as writer:
-                        reviews_df.to_excel(writer, index=False, sheet_name='Reviews')
-                    excel_file.seek(0)
-
-                    # Set up the download link
-                    st.download_button('Download Database', data=excel_file, file_name='reviews_database.xlsx', mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                
                 
                 # Create a beta expander for delete reviews feature
-                with st.expander('Delete Reviews'):
+                with st.expander('QUICK TOOLS MENU'):
+                    st.subheader('Download all reviews')
+                    st.write('Downloads reviews in xlsx format')
+                    if st.button('Download'):
+                        # Convert DataFrame to Excel file in memory
+                        excel_file = io.BytesIO()
+                        with pd.ExcelWriter(excel_file, engine='xlsxwriter') as writer:
+                            reviews_df.to_excel(writer, index=False, sheet_name='Reviews')
+                        excel_file.seek(0)
+
+                        # Set up the download link
+                        st.download_button('Download Database', data=excel_file, file_name='reviews_database.xlsx', mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
                     st.subheader('Delete all reviews')
                     st.write('Use this button to delete all reviews at one click')
                     if st.button('Delete All Reviews'):
