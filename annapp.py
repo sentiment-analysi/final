@@ -398,20 +398,14 @@ def run_sentiment_app():
                     st.experimental_rerun()
                     
                 if st.button('Download'):
-                    # Create a new workbook and add the DataFrame to it
-                    workbook = Workbook()
-                    sheet = workbook.active
-                    for r in dataframe_to_rows(reviews_df, index=False, header=True):
-                        sheet.append(r)
+                    # Convert DataFrame to Excel file in memory
+                    excel_file = io.BytesIO()
+                    with pd.ExcelWriter(excel_file, engine='xlsxwriter') as writer:
+                        reviews_df.to_excel(writer, index=False, sheet_name='Reviews')
+                    excel_file.seek(0)
 
-                    # Save the workbook to a temporary file
-                    temp_file = "reviews_database.xlsx"
-                    workbook.save(temp_file)
-
-                    # Provide a download link for the temporary file
-                    with open(temp_file, "rb") as f:
-                        file_data = f.read()
-                        st.download_button("Download Database", file_data, file_name="reviews_database.xlsx", mime="application/octet-stream")
+                    # Set up the download link
+                    st.download_button('Download Database', data=excel_file, file_name='reviews_database.xlsx', mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
                 
                 # Create a beta expander for delete reviews feature
                 with st.expander('Delete Reviews'):
