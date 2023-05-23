@@ -234,8 +234,6 @@ def run_sentiment_app():
             ax.set_ylabel('Count')
             st.pyplot(fig)
 
-            
-
     elif choice == 'Forms':
         st.subheader('Course Evaluation/Feedback Form :')
         # Check if user is an admin
@@ -251,7 +249,6 @@ def run_sentiment_app():
                     st.success('Logged in as admin.')
                 else:
                     st.error('Incorrect username or password.')
-
 
         # User review form
         else:
@@ -286,7 +283,6 @@ def run_sentiment_app():
 
                             conn.commit()
                             st.success('Thank you, Your feedback is submitted.')
-                           
 
         # Display reviews for admin
         if is_admin and username == 'admin' and password == 'password':
@@ -298,26 +294,24 @@ def run_sentiment_app():
                 st.header('Reviews Table')
                 st.dataframe(reviews_df)
                 if st.button('Refresh'):
-                  reviews_df = pd.read_sql_query("SELECT * FROM reviews", conn)
-                  st.experimental_rerun()
+                    reviews_df = pd.read_sql_query("SELECT * FROM reviews", conn)
+                    st.experimental_rerun()
                 # Create a beta expander for delete reviews feature
                 with st.expander('Delete Reviews'):
-                    st.write('Use this section to delete reviews from the database.')
-                    st.write('Select a USN from the dropdown, and click the Delete button to remove the review.')
-                    delete_reviews()
-                    st.write('Click this button below , if you want to delete all the entries')
-                    if st.button('Delete all reviews'):
-                      # Add confirmation dialog box
-                      c.execute("DELETE FROM reviews")
-                      conn.commit()
-                      c.execute("VACUUM")
-                      st.success('All reviews have been deleted.')
-                      reviews_df = pd.read_sql_query("SELECT * FROM reviews", conn)
-                      st.experimental_rerun()
-
-                  
+                    if st.button('Delete All Reviews'):
+                        c.execute("DELETE FROM reviews")
+                        conn.commit()
+                        st.success('All reviews have been deleted.')
+                    else:
+                        review_id = st.number_input('Enter the Review ID to delete:', min_value=1, max_value=len(reviews_df), value=1, step=1)
+                        if st.button('Delete Review'):
+                            review_id_to_delete = reviews_df.iloc[review_id-1]['id']
+                            c.execute("DELETE FROM reviews WHERE id=%s", (review_id_to_delete,))
+                            conn.commit()
+                            st.success(f'Review with ID {review_id_to_delete} has been deleted.')
 
                 show_sentiment_wise_analytics(reviews_df)
+
     # Show the analytics page if the user selects the 'Analytics' option
     elif choice == 'Analytics':
         st.subheader('Upload an excel file to perform sentiment analysis')
@@ -330,9 +324,8 @@ def run_sentiment_app():
             # Show analytics in a separate tab on click of a button
             if st.button('Show Analytics'):
                 show_analytics(df, column_name)
-                
-     
+
 
 # Run the app
-if __name__=='__main__':
+if __name__ == '__main__':
     run_sentiment_app()
