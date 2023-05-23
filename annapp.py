@@ -177,7 +177,7 @@ def delete_reviews():
 
 
     
-def show_sentiment_wise_analytics(reviews_df):
+def show_sentiment_wise_analytics(reviews_df, border_size=0.35):
     num_pos_reviewsfor1 = len(reviews_df[reviews_df['sentiment1'] == 'Positive review'])
     num_pos_reviewsfor2 = len(reviews_df[reviews_df['sentiment2'] == 'Positive review'])
     num_pos_reviewsfor3 = len(reviews_df[reviews_df['sentiment3'] == 'Positive review'])
@@ -206,7 +206,7 @@ def show_sentiment_wise_analytics(reviews_df):
     st.subheader("Total Reviews")
     st.write(f"Positive reviews: {totalnum_pos_reviews}")
     st.write(f"Negative reviews: {totalnum_neg_reviews}")
-    st.write(f"Total reviews recorded: {totalnum_pos_reviews+totalnum_neg_reviews}")
+    st.write(f"Total reviews recorded: {totalnum_pos_reviews + totalnum_neg_reviews}")
 
     # Create a bar graph of the sentiment analysis results
     fig, ax = plt.subplots(figsize=(10, 5))
@@ -215,7 +215,7 @@ def show_sentiment_wise_analytics(reviews_df):
     pos_counts = [num_pos_reviewsfor1, num_pos_reviewsfor2, num_pos_reviewsfor3, totalnum_pos_reviews]
     neg_counts = [num_neg_reviewsfor1, num_neg_reviewsfor2, num_neg_reviewsfor3, totalnum_neg_reviews]
     x = np.arange(len(question_labels))
-    width = 0.35
+    width = border_size
     ax.bar(x - width / 2, pos_counts, width, label='Positive', color='green')
     ax.bar(x + width / 2, neg_counts, width, label='Negative', color='red')
     ax.set_xticks(x)
@@ -225,13 +225,16 @@ def show_sentiment_wise_analytics(reviews_df):
     ax.set_xlabel('Questions')
     ax.set_title('Sentiment Analysis Results')
 
-    # Add count labels above each bar
+    # Add count labels above each bar if graph is present
     for i, pos_count in enumerate(pos_counts):
-        ax.text(i - width / 2, pos_count + 0.1, str(pos_count), ha='center', color='black')
+        if pos_count > 0:
+            ax.text(i - width / 2, pos_count + 0.1, str(pos_count), ha='center', color='black')
     for i, neg_count in enumerate(neg_counts):
-        ax.text(i + width / 2, neg_count + 0.1, str(neg_count), ha='center', color='black')
+        if neg_count > 0:
+            ax.text(i + width / 2, neg_count + 0.1, str(neg_count), ha='center', color='black')
 
     st.pyplot(fig)
+
 
 
 
