@@ -14,6 +14,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sqlite3
 import mysql.connector
+from openpyxl import Workbook
+
 nltk.download('stopwords')
 
 # Load the trained model and preprocessing objects
@@ -396,8 +398,20 @@ def run_sentiment_app():
                     st.experimental_rerun()
                     
                 if st.button('Download'):
-                    reviews_df.to_excel('reviews_database.xlsx', index=False)
-                    st.success('Database downloaded successfully as reviews_database.xlsx.')
+                    # Create a new workbook and add the DataFrame to it
+                    workbook = Workbook()
+                    sheet = workbook.active
+                    for r in dataframe_to_rows(reviews_df, index=False, header=True):
+                        sheet.append(r)
+
+                    # Save the workbook to a temporary file
+                    temp_file = "reviews_database.xlsx"
+                    workbook.save(temp_file)
+
+                    # Provide a download link for the temporary file
+                    with open(temp_file, "rb") as f:
+                        file_data = f.read()
+                        st.download_button("Download Database", file_data, file_name="reviews_database.xlsx", mime="application/octet-stream")
                 
                 # Create a beta expander for delete reviews feature
                 with st.expander('Delete Reviews'):
