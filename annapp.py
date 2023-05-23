@@ -298,11 +298,15 @@ def run_sentiment_app():
                     st.experimental_rerun()
                 # Create a beta expander for delete reviews feature
                 with st.expander('Delete Reviews'):
+                    st.subheader('Delete all reviews')
+                    st.write('Use this button to delete all reviews at one click')
                     if st.button('Delete All Reviews'):
                         c.execute("DELETE FROM reviews")
                         conn.commit()
                         st.success('All reviews have been deleted.')
                     else:
+                        st.subheader('Delete a particular reviews')
+                        st.write('Use this button to delete particular review based on USN')
                         usns = ['Select USN'] + reviews_df['usn'].unique().tolist()  # Add initial placeholder option
                         selected_usn = st.selectbox('Select USN:', usns)
                         if selected_usn != 'Select USN':  # Check if a valid USN is selected
