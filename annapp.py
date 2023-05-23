@@ -390,9 +390,15 @@ def run_sentiment_app():
             else:
                 st.header('Reviews Table')
                 st.dataframe(reviews_df)
+                
                 if st.button('Refresh'):
                     reviews_df = pd.read_sql_query("SELECT * FROM reviews", conn)
                     st.experimental_rerun()
+                    
+                if st.button('Download'):
+                    reviews_df.to_excel('reviews_database.xlsx', index=False)
+                    st.success('Database downloaded successfully as reviews_database.xlsx.')
+                
                 # Create a beta expander for delete reviews feature
                 with st.expander('Delete Reviews'):
                     st.subheader('Delete all reviews')
