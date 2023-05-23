@@ -121,6 +121,7 @@ def show_sentiment_wise_analytics(reviews_df):
     st.write(f"Total reviews recorded: {totalnum_pos_reviews+totalnum_neg_reviews}")
 
     # Create a bar graph of the sentiment analysis results
+    # Create a bar graph of the sentiment analysis results
     fig, ax = plt.subplots(figsize=(10, 5))
     sentiment_labels = ['Positive', 'Negative']
     question_labels = ['Q1', 'Q2', 'Q3', 'Total']
@@ -140,10 +141,14 @@ def show_sentiment_wise_analytics(reviews_df):
     # Add count labels above each bar
     for i, pos_count in enumerate(pos_counts):
         ax.text(i - width / 2, pos_count + 0.1, str(pos_count), ha='center', color='black')
+        ax.text(i - width / 2, neg_counts[i] + 0.1, str(neg_counts[i]), ha='center', color='black')
     for i, neg_count in enumerate(neg_counts):
         ax.text(i + width / 2, neg_count + 0.1, str(neg_count), ha='center', color='black')
+        ax.text(i + width / 2, pos_counts[i] + 0.1, str(pos_counts[i]), ha='center', color='black')
 
     st.pyplot(fig)
+
+    
 
 
  
