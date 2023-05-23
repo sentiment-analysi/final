@@ -349,6 +349,8 @@ def run_sentiment_app():
                         c.execute("DELETE FROM reviews")
                         conn.commit()
                         st.success('All reviews have been deleted.')
+                        reviews_df = pd.read_sql_query("SELECT * FROM reviews", conn)
+                        st.experimental_rerun()
                     else:
                         st.subheader('Delete a particular reviews')
                         st.write('Use this button to delete particular review based on USN')
