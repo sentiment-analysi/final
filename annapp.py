@@ -303,12 +303,13 @@ def run_sentiment_app():
                         conn.commit()
                         st.success('All reviews have been deleted.')
                     else:
-                        usns = reviews_df['usn'].unique().tolist()
+                        usns = ['Select USN'] + reviews_df['usn'].unique().tolist()  # Add initial placeholder option
                         selected_usn = st.selectbox('Select USN:', usns)
-                        if st.button('Delete'):
-                            c.execute("DELETE FROM reviews WHERE usn=%s", (selected_usn,))
-                            conn.commit()
-                            st.success(f"Review for {selected_usn} deleted.")
+                        if selected_usn != 'Select USN':  # Check if a valid USN is selected
+                            if st.button('Delete'):
+                                c.execute("DELETE FROM reviews WHERE usn=%s", (selected_usn,))
+                                conn.commit()
+                                st.success(f"Review for {selected_usn} deleted.")
 
                 show_sentiment_wise_analytics(reviews_df)
 
