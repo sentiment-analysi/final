@@ -359,6 +359,8 @@ def run_sentiment_app():
                                 c.execute("DELETE FROM reviews WHERE usn=%s", (selected_usn,))
                                 conn.commit()
                                 st.success(f"Review for {selected_usn} deleted.")
+                                reviews_df = pd.read_sql_query("SELECT * FROM reviews", conn)
+                                st.experimental_rerun()
 
                 show_sentiment_wise_analytics(reviews_df)
 
