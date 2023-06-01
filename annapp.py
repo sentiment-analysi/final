@@ -27,10 +27,10 @@ import mysql.connector
 
 # Establish a connection to your MySQL database
 conn = mysql.connector.connect(
-    host="sql12.freesqldatabase.com",
-    user="sql12619244",
-    password="NP2lGRPxFL",
-    database="sql12619244"
+    host="sql302.epizy.com",
+    user="epiz_34331760",
+    password="Cgbrmfpfvwpcr",
+    database="epiz_34331760_reviews"
 )
 c = conn.cursor()
 
