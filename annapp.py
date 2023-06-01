@@ -27,7 +27,7 @@ import mysql.connector
 
 # Establish a connection to your MySQL database
 conn = mysql.connector.connect(
-    host="sql302.epizy.com",
+    host="sql302.byetcluster.com",
     user="epiz_34331760",
     password="Cgbrmfpfvwpcr",
     database="epiz_34331760_reviews"
